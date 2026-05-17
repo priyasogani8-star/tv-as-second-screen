@@ -6,6 +6,8 @@
 | `01-CreateTVUser.ps1` | PowerShell script called by the above. |
 | `02-Setup.bat` | **Step 2 setup.** Installs RDP Wrapper, enables Remote Desktop, downloads compatibility INI. |
 | `02-Setup.ps1` | PowerShell script called by the above. |
+| `CheckStatus.bat` | **Check setup.** Shows green/red for every requirement. Run any time to diagnose problems. |
+| `CheckStatus.ps1` | PowerShell script called by the above. |
 | `StartTV.bat` | **Daily use.** Double-click to start. Requests admin, calls StartTV.ps1. |
 | `StartTV.ps1` | Ensures extended display → auto-patches RDP Wrapper → launches RDP session on TV. |
 | `LockCursor.bat` | **Optional.** Double-click to lock mouse to laptop screen. Calls LockCursor.ps1. |
@@ -18,6 +20,7 @@
 
 1. **First time only:** Run `01-CreateTVUser.bat` (approve UAC prompt)
 2. **First time only:** Run `02-Setup.bat` (installs RDP Wrapper)
-3. Plug in HDMI cable, turn TV on
-4. Run `StartTV.bat` (approve UAC) — TV session launches
-5. Run `LockCursor.bat` to lock the mouse to the laptop screen
+3. **Optional check:** Run `CheckStatus.bat` to verify everything is ready
+4. Plug in HDMI cable, turn TV on
+5. Run `StartTV.bat` (approve UAC) — TV session launches
+6. Run `LockCursor.bat` to lock the mouse to the laptop screen

@@ -67,6 +67,7 @@ flowchart TD
 |---|---|---|
 | `01-CreateTVUser.bat` | Once, first-time setup | Creates a Windows user for TV sessions. Saves credentials for auto-login. |
 | `02-Setup.bat` | Once, first-time setup | Installs RDP Wrapper, enables Remote Desktop, downloads compatibility INI. |
+| `CheckStatus.bat` | Any time | Shows green/red for every requirement. Diagnose problems before they become errors. |
 | `StartTV.bat` | Every time you use TV | Switches to extended display, patches RDP if needed, launches TV session. |
 | `LockCursor.bat` | Optional, after StartTV | Locks your mouse to the laptop. Close window to unlock. |
 | `WhoReleasesClip.ps1` | Debug only | Monitors which app releases the cursor lock. Not needed for normal use. |
