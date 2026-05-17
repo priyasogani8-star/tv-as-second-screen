@@ -1,0 +1,12 @@
+# Generated at runtime — contains your screen resolution
+TVSession.rdp
+
+# Local config — contains your Windows username and password
+# Created by 01-CreateTVUser.bat (NEVER commit this)
+tv-config.local.ps1
+
+# Claude Code session files
+.claude/
+
+# Logs
+*.log
