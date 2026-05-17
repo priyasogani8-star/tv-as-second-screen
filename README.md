@@ -1,127 +1,123 @@
 # TV Workspace
 
-Turn your TV into an extended Windows screen in 2 clicks — with a dedicated isolated session, automatic cursor locking, and self-healing RDP setup.
+Use your TV as a second screen for your Windows laptop — with its own separate desktop.
 
 > **Watch the setup walkthrough:** *(screen recording coming soon)*
 
 ---
 
-## What This Does
+## What does this do?
 
-- Opens a full-screen Windows session on your TV via RDP loopback
-- Keeps your mouse locked to your laptop while the TV runs independently
-- Automatically patches itself after Windows updates
-- Uses a separate Windows user account so your TV session is clean and isolated
+You plug a cable from your laptop to the TV.
+Your TV becomes a **second screen** — with its own taskbar, its own apps, its own desktop.
+Your laptop stays exactly as it is. You work on your laptop normally.
+Your mouse stays on the laptop. The TV runs on its own.
+
+That's it.
 
 ---
 
-## What You Need
+## What do you need?
 
-| Item | Details |
+| What | Example |
 |---|---|
-| **Windows laptop or PC** | Windows 10 or 11 (Home or Pro) |
-| **TV or external screen** | Any screen with an HDMI input — TV, monitor, projector |
-| **HDMI cable** | Standard HDMI — or USB-C to HDMI / DisplayPort to HDMI adapter |
+| A Windows laptop or PC | Any Windows laptop from the last 10 years |
+| A TV, monitor, or projector | Anything with an HDMI port on the back |
+| A cable | HDMI cable — or a USB-C to HDMI adapter if your laptop has no HDMI port |
 
-> **Tip:** If your laptop only has USB-C ports, get a USB-C to HDMI adapter. Search "USB-C to HDMI adapter" on Amazon — they're under $15.
+> **Not sure which cable?** Look at the side of your laptop. If you see a port that looks like a wide flat rectangle — that's HDMI, use an HDMI cable. If you only see small oval ports — those are USB-C, get a "USB-C to HDMI adapter" (under ₹500 / $6 on Amazon).
 
 ---
 
-## Setup Flowchart
+## How to set it up
 
 ```mermaid
 flowchart TD
-    START([Start Here]) --> HW
+    NEED["🛒  First, get these 3 things\n━━━━━━━━━━━━━━━━━━━━━━━━\n💻  A Windows laptop or PC\n📺  A TV or any extra screen\n🔌  An HDMI cable\n      (or USB-C to HDMI adapter)"]
 
-    subgraph HW ["🔌 Hardware — do this first"]
-        H1["💻 Windows 10 or 11\nlaptop or PC"]
-        H2["📺 TV, monitor, or projector\nwith HDMI input"]
-        H3["🔗 HDMI cable\nor USB-C to HDMI adapter"]
-    end
+    NEED --> ONCE
 
-    HW --> S1
+    ONCE["⏱️  Do these TWO steps ONCE\n      You will never need to do them again\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"]
 
-    subgraph SETUP ["⚙️ One-Time Setup — do steps 1 and 2 once"]
-        S1["Step 1\n🖱️ Double-click\n01-CreateTVUser.bat\n\nCreates a separate Windows\nuser account for your TV session\nSaves the password for auto-login"]
-        S2["Step 2\n🖱️ Double-click\n02-Setup.bat\n\nInstalls RDP Wrapper\nEnables Remote Desktop\nDownloads latest compatibility files"]
-        S1 --> S2
-    end
+    ONCE --> S1
 
-    S2 --> PLUG
+    S1["1️⃣  Double-click  👇\n━━━━━━━━━━━━━━━━\n01-CreateTVUser.bat\n━━━━━━━━━━━━━━━━\nMakes a separate account\nfor the TV — like adding\na new profile on Netflix"]
 
-    subgraph DAILY ["📅 Daily Use — do steps 3–5 every time"]
-        PLUG["Step 3\nPlug HDMI cable into laptop and TV\nTurn the TV on\nSwitch TV input to HDMI"]
-        S4["Step 4\n🖱️ Double-click\nStartTV.bat\n\nTV activates as extended screen\nYour Windows session opens on TV\nAuto-patches after Windows updates"]
-        S5["Step 5  optional\n🖱️ Double-click\nLockCursor.bat\n\nMouse stays on laptop\nTV session runs independently\nClose the window to unlock mouse"]
-        PLUG --> S4 --> S5
-    end
+    S1 --> S2
 
-    S5 --> DONE(["✅ Done!\nWork on your laptop\nTV shows its own Windows session\nClose LockCursor window to move\nmouse freely between screens"])
+    S2["2️⃣  Double-click  👇\n━━━━━━━━━━━━━━━\n02-Setup.bat\n━━━━━━━━━━━━━━━\nInstalls the software\nthat makes this work\n(downloads automatically)"]
+
+    S2 --> EVERYTIME
+
+    EVERYTIME["📅  Every time you want to use the TV\n      Just 3 simple steps\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"]
+
+    EVERYTIME --> S3
+
+    S3["3️⃣  Plug in the cable\n━━━━━━━━━━━━━━━━━━\nHDMI cable from laptop to TV\nTurn the TV on\nSwitch TV input to HDMI\n(use your TV remote)"]
+
+    S3 --> S4
+
+    S4["4️⃣  Double-click  👇\n━━━━━━━━━━━━━━\nStartTV.bat\n━━━━━━━━━━━━━━\nThe TV lights up with\nits own Windows desktop\nApprove the pop-up that asks\nfor permission — click Yes"]
+
+    S4 --> S5
+
+    S5["5️⃣  Double-click  👇  optional\n━━━━━━━━━━━━━━━━━━━━━━━\nLockCursor.bat\n━━━━━━━━━━━━━━━━━━━━━━━\nKeeps your mouse on the laptop\nso it does not wander to the TV\nClose this window to turn it off"]
+
+    S5 --> DONE
+
+    DONE(["✅  All done!\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nYour laptop   →  your keyboard, mouse, and apps\nYour TV          →  its own separate screen\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"])
 ```
 
 ---
 
-## File Guide
+## Something not working?
 
-| File | When to run | What it does |
+Double-click **CheckStatus.bat** — it checks everything and shows you exactly what is wrong in plain English.
+
+For step-by-step fixes, see [TROUBLESHOOT.md](TROUBLESHOOT.md).
+
+---
+
+## File guide
+
+| File | When | What it does in plain English |
 |---|---|---|
-| `01-CreateTVUser.bat` | Once, first-time setup | Creates a Windows user for TV sessions. Saves credentials for auto-login. |
-| `02-Setup.bat` | Once, first-time setup | Installs RDP Wrapper, enables Remote Desktop, downloads compatibility INI. |
-| `CheckStatus.bat` | Any time | Shows green/red for every requirement. Diagnose problems before they become errors. |
-| `StartTV.bat` | Every time you use TV | Switches to extended display, patches RDP if needed, launches TV session. |
-| `LockCursor.bat` | Optional, after StartTV | Locks your mouse to the laptop. Close window to unlock. |
-| `WhoReleasesClip.ps1` | Debug only | Monitors which app releases the cursor lock. Not needed for normal use. |
-
----
-
-## After First-Time Setup
-
-Your folder will contain one extra file that is **not uploaded to GitHub** (it's in `.gitignore`):
-
-- **`tv-config.local.ps1`** — stores your TV user account name and password locally. Never share this file.
-
----
-
-## How It Works (Technical)
-
-Windows normally prevents RDP loopback connections (connecting to yourself via 127.0.0.2). **RDP Wrapper** patches `termsrv.dll` to allow this, enabling a full second Windows session to appear on the TV — with its own taskbar, apps, and desktop.
-
-The INI file that RDP Wrapper uses to know your Windows build version updates frequently as Windows updates. `StartTV.bat` automatically checks 4 community sources and applies the latest one every time you run it, so it self-heals after Windows updates.
+| `01-CreateTVUser.bat` | Once | Creates a separate TV account on your computer |
+| `02-Setup.bat` | Once | Downloads and installs the software that makes this work |
+| `CheckStatus.bat` | Any time | Checks everything — shows green tick or red cross for each thing |
+| `StartTV.bat` | Every time | Turns the TV on as a second screen and opens a Windows desktop on it |
+| `LockCursor.bat` | Optional | Keeps your mouse on the laptop. Close the window to turn it off. |
 
 ---
 
 ## FAQ
 
-**Q: Do I need to be a computer expert to set this up?**
-A: No. Just double-click the files in order. Each file shows clear instructions on screen.
+**Do I need to be technical to set this up?**
+No. Just double-click the files in order, one by one. Each one tells you what to do on screen.
 
-**Q: Will this break my laptop?**
-A: No. RDP Wrapper only patches one Windows service (`termsrv.dll`). Running `02-Setup.bat` or `RDPWInst.exe -u` uninstalls it completely.
+**Will this break my laptop?**
+No. If you ever want to undo everything, run `02-Setup.bat` and it has an uninstall option. Nothing permanent is changed.
 
-**Q: Does this work on Windows Home?**
-A: Yes. RDP Wrapper adds RDP support to Windows Home editions that normally block it.
+**Does this work on Windows Home edition?**
+Yes. Works on Windows 10 and 11, Home and Pro.
 
-**Q: My TV shows "This PC can't connect to the remote computer" — what do I do?**
-A: See [TROUBLESHOOT.md](TROUBLESHOOT.md).
+**My TV says "can't connect" or shows an error.**
+See [TROUBLESHOOT.md](TROUBLESHOOT.md) — it lists every common error in plain English.
 
-**Q: After a Windows Update, StartTV stopped working.**
-A: Just run `StartTV.bat` again — it auto-downloads the community patch. If it says "not patched yet", wait 12–24 hours and try again. The community usually patches within a day.
+**After a Windows update, it stopped working.**
+Run `StartTV.bat` again. It fixes itself automatically. If it says "try again tomorrow", just wait a day and run it again — it will work.
 
-**Q: Can I use a monitor instead of a TV?**
-A: Yes. Any screen with an HDMI port works — TV, monitor, projector.
+**Can I use a normal monitor instead of a TV?**
+Yes. Any screen with an HDMI port works.
 
 ---
 
-## Uninstall
+## How it works (for the curious)
 
-To remove everything:
-1. Open Command Prompt as Administrator
-2. Navigate to your RDP Wrapper folder: `cd "C:\Program Files\RDP Wrapper"`
-3. Run: `RDPWInst.exe -u`
-4. Delete the TV Workspace folder
+Windows normally does not allow you to open a second desktop session on the same PC. This tool installs a small patch called **RDP Wrapper** that unlocks this. The TV connects to your laptop over a private internal cable (not the internet). Every time you run `StartTV.bat`, it also checks if Windows has updated and downloads any fixes automatically — so it stays working without you doing anything.
 
 ---
 
 ## License
 
-MIT — free to use, modify, and share.
+MIT — free to use, share, and modify.
