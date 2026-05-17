@@ -45,6 +45,12 @@ Log "Enabling Remote Desktop..."
 Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" `
     -Name "fDenyTSConnections" -Value 0 -ErrorAction SilentlyContinue
 
+# Verify the registry write succeeded
+$rdpCheck = (Get-ItemProperty "HKLM:\System\CurrentControlSet\Control\Terminal Server" -ErrorAction SilentlyContinue).fDenyTSConnections
+if ($rdpCheck -ne 0) {
+    Fail "Could not enable Remote Desktop in registry. Try right-clicking 02-Setup.bat and choosing 'Run as administrator'."
+}
+
 # Disable NLA requirement (so loopback RDP works without domain)
 Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" `
     -Name "UserAuthentication" -Value 0 -ErrorAction SilentlyContinue
@@ -73,7 +79,8 @@ $rdpwrapExe  = "$rdpwrapDir\RDPWInst.exe"
 $rdpwrapIni  = "$rdpwrapDir\rdpwrap.ini"
 $tsDll       = "$env:SystemRoot\System32\termsrv.dll"
 $tsVer       = (Get-Item $tsDll -ErrorAction SilentlyContinue).VersionInfo.FileVersion
-$tsBuild     = if ($tsVer) { $tsVer.Split('.')[3].Trim().Split(' ')[0] } else { "unknown" }
+$rawBuild    = if ($tsVer) { $tsVer.Split('.')[3].Trim().Split(' ')[0] } else { "" }
+$tsBuild     = if ($rawBuild -match '^\d+$') { $rawBuild } else { "unknown" }
 
 if (Test-Path $rdpwrapExe) {
     OK "RDP Wrapper already installed at: $rdpwrapDir"
@@ -179,12 +186,23 @@ foreach ($url in $INI_SOURCES) {
 }
 
 if ($bestIni -and (Test-Path $rdpwrapIni)) {
-    Stop-Service TermService -Force -ErrorAction SilentlyContinue
-    Start-Sleep 2
-    $bestIni | Out-File -FilePath $rdpwrapIni -Encoding UTF8 -Force
-    Start-Service TermService -ErrorAction SilentlyContinue
-    Start-Sleep 2
-    OK "Community INI applied"
+    # Only apply if the INI actually supports the current build
+    if ($bestIni -match [regex]::Escape($tsBuild)) {
+        Stop-Service TermService -Force -ErrorAction SilentlyContinue
+        Start-Sleep 2
+        $bestIni | Out-File -FilePath $rdpwrapIni -Encoding UTF8 -Force
+        Start-Service TermService -ErrorAction SilentlyContinue
+        Start-Sleep 3
+        $svcStatus = (Get-Service TermService -ErrorAction SilentlyContinue).Status
+        if ($svcStatus -ne "Running") {
+            Warn "TermService did not restart after INI update. Run StartTV.bat to retry."
+        } else {
+            OK "Community INI applied and TermService restarted"
+        }
+    } else {
+        Warn "No community INI found for build $tsBuild yet (up to 48 hours after a Windows update)."
+        Warn "Existing INI left unchanged. StartTV.bat will retry automatically."
+    }
 } elseif (-not $bestIni) {
     Warn "Could not reach any INI source - check your internet connection."
     Warn "StartTV.bat will retry this automatically each time you run it."

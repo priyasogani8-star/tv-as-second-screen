@@ -145,7 +145,8 @@ Log "Checking RDP Wrapper..."
 
 $tsDll   = "$env:SystemRoot\System32\termsrv.dll"
 $tsVer   = (Get-Item $tsDll -ErrorAction SilentlyContinue).VersionInfo.FileVersion
-$tsBuild = if ($tsVer) { $tsVer.Split('.')[3].Trim().Split(' ')[0] } else { "unknown" }
+$rawBuild = if ($tsVer) { $tsVer.Split('.')[3].Trim().Split(' ')[0] } else { "" }
+$tsBuild  = if ($rawBuild -match '^\d+$') { $rawBuild } else { "unknown" }
 
 $rdpReady = $false
 
@@ -178,13 +179,21 @@ if (Test-Path $WRAP_INI) {
             $patchedIni | Out-File -FilePath $WRAP_INI -Encoding UTF8 -Force
             Start-Service TermService -ErrorAction SilentlyContinue
             Start-Sleep 3
+            $svcStatus = (Get-Service TermService -ErrorAction SilentlyContinue).Status
+            if ($svcStatus -ne "Running") {
+                Warn "TermService did not restart after patching. Run StartTV.bat again."
+                Write-Host ""
+                Write-Host "  Press Enter to close..." -ForegroundColor Gray
+                Read-Host | Out-Null
+                exit 0
+            }
             OK "RDP Wrapper patched for build $tsBuild - ready!"
             $rdpReady = $true
         } else {
             Warn "Build $tsBuild not patched by community yet (checked $($INI_SOURCES.Count) sources)."
             Warn ""
-            Warn "This happens 0-48 hours after a Windows update."
-            Warn "Try again tomorrow - the script will auto-fix when the patch lands."
+            Warn "This happens up to 48 hours after a Windows update."
+            Warn "Run StartTV.bat again in 48 hours - it will auto-fix when the patch lands."
             Warn ""
             Warn "Your workspace and scripts are ready. Just re-run StartTV.bat tomorrow."
             Write-Host ""

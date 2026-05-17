@@ -77,7 +77,7 @@ The TV runs its own full Windows desktop. Anything you can do on a PC, you can s
 No. Just double-click the files in order, one by one. Each one tells you what to do on screen.
 
 **Will this break my laptop?**
-No. If you ever want to undo everything, run `02-Setup.bat` and it has an uninstall option. Nothing permanent is changed.
+No. RDP Wrapper can be uninstalled manually: open `C:\Program Files\RDP Wrapper\` and run `RDPWInst.exe -u` as Administrator. Nothing else is permanently changed.
 
 **Does this work on Windows Home edition?**
 Yes. Works on Windows 10 and 11, Home and Pro.
@@ -86,7 +86,7 @@ Yes. Works on Windows 10 and 11, Home and Pro.
 See [TROUBLESHOOT.md](TROUBLESHOOT.md); it lists every common error in plain English.
 
 **After a Windows update, it stopped working.**
-Run `StartTV.bat` again. It fixes itself automatically. If it says "try again tomorrow", just wait a day and run it again; it will work.
+Run `StartTV.bat` again. It fixes itself automatically. If it says the patch is not available yet, wait up to 48 hours and run it again; it will work.
 
 **Can I use a normal monitor instead of a TV?**
 Yes. Any screen with an HDMI port works.

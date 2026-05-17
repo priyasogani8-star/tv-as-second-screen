@@ -84,13 +84,14 @@ if (Test-Path $rdpwrapExe) {
 if (Test-Path $rdpwrapIni) {
     $tsDll   = "$env:SystemRoot\System32\termsrv.dll"
     $tsVer   = (Get-Item $tsDll -ErrorAction SilentlyContinue).VersionInfo.FileVersion
-    $tsBuild = if ($tsVer) { $tsVer.Split('.')[3].Trim().Split(' ')[0] } else { "unknown" }
+    $rawBuild = if ($tsVer) { $tsVer.Split('.')[3].Trim().Split(' ')[0] } else { "" }
+    $tsBuild  = if ($rawBuild -match '^\d+$') { $rawBuild } else { "unknown" }
     $iniContent = Get-Content $rdpwrapIni -Raw -ErrorAction SilentlyContinue
 
     if ($iniContent -match [regex]::Escape($tsBuild)) {
         Pass "INI supports current Windows build ($tsBuild)"
     } else {
-        Warn "INI may not support current build ($tsBuild)" "Run StartTV.bat - it auto-downloads the patch, or wait 24h after a Windows Update"
+        Warn "INI may not support current build ($tsBuild)" "Run StartTV.bat - it auto-downloads the patch, or wait up to 48 hours after a Windows update"
     }
 } else {
     Fail "rdpwrap.ini not found" "Run 02-Setup.bat to download it"
@@ -174,7 +175,7 @@ Section "Firewall"
 
 try {
     $rdpRule = Get-NetFirewallRule -DisplayGroup "Remote Desktop" -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($rdpRule -and $rdpRule.Enabled -eq "True") {
+    if ($rdpRule -and ($rdpRule.Enabled -eq $true -or $rdpRule.Enabled.ToString() -eq "True")) {
         Pass "Remote Desktop firewall rule is active"
     } else {
         Warn "Remote Desktop firewall rule may be disabled" "Run 02-Setup.bat to fix this"

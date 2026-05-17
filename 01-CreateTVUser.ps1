@@ -43,11 +43,14 @@ if ($existingUser) {
     $pass1 = Read-Host "  Enter password" -AsSecureString
     $pass2 = Read-Host "  Confirm password" -AsSecureString
 
-    # Compare passwords
-    $p1 = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
-              [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass1))
-    $p2 = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
-              [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass2))
+    # Compare passwords (free BSTR immediately after use to avoid plaintext in unmanaged memory)
+    $bstr1 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass1)
+    $p1    = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr1)
+    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr1)
+
+    $bstr2 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass2)
+    $p2    = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr2)
+    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr2)
 
     if ($p1 -ne $p2) { Fail "Passwords do not match. Run this script again." }
     if ($p1.Length -lt 4) { Fail "Password too short. Use at least 4 characters." }
@@ -80,9 +83,10 @@ Write-Host "  Enter the password for '$TV_USERNAME' to save for auto-login." -Fo
 Write-Host "  (This is stored locally in tv-config.local.ps1 - never uploaded)" -ForegroundColor Gray
 Write-Host ""
 
-$savedPass = Read-Host "  Password for '$TV_USERNAME'" -AsSecureString
-$savedPassPlain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
-    [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($savedPass))
+$savedPass  = Read-Host "  Password for '$TV_USERNAME'" -AsSecureString
+$savedBstr  = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($savedPass)
+$savedPassPlain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($savedBstr)
+[System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($savedBstr)
 
 # ---- Verify password works ----
 Add-Type -AssemblyName System.DirectoryServices.AccountManagement
@@ -91,10 +95,9 @@ $ctx = New-Object System.DirectoryServices.AccountManagement.PrincipalContext(
 $valid = $ctx.ValidateCredentials($TV_USERNAME, $savedPassPlain)
 
 if (-not $valid) {
-    Warn "Password did not match the account. Config saved anyway - double-check if login fails."
-} else {
-    OK "Password verified"
+    Fail "Password did not match the account. Run this script again and enter the correct password."
 }
+OK "Password verified"
 
 # ---- Save local config (gitignored) ----
 $configPath = "$PSScriptRoot\tv-config.local.ps1"

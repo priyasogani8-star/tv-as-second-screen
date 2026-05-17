@@ -51,7 +51,7 @@ Common problems and how to fix them; no technical knowledge needed.
 **C) RDP Wrapper isn't working for your Windows build**
 - Open `C:\Program Files\RDP Wrapper\` and run `RDPConf.exe`
 - Look at the status next to "Wrapper state"; it should say "Fully supported"
-- If it says "Not supported", run `02-Setup.bat` again or wait 24 hours for the community patch
+- If it says "Not supported", run `02-Setup.bat` again or wait up to 48 hours for the community patch
 
 ---
 
@@ -82,7 +82,7 @@ Common problems and how to fix them; no technical knowledge needed.
 
 **What's happening:** You recently installed a Windows Update, and the RDP Wrapper community hasn't released an update for your exact Windows build yet.
 
-**Fix:** Wait 12–48 hours and run `StartTV.bat` again. The script automatically checks for the patch; you don't need to do anything else.
+**Fix:** Wait up to 48 hours and run `StartTV.bat` again. The script automatically checks for the patch; you don't need to do anything else.
 
 ---
 
@@ -111,8 +111,8 @@ Common problems and how to fix them; no technical knowledge needed.
 **Fix, in order:**
 1. Restart your PC first (if not already done after the update)
 2. Run `StartTV.bat`; it auto-patches RDP Wrapper
-3. If it says "not patched yet", wait 24 hours and try again
-4. If you wait 48+ hours and it still doesn't work, run `02-Setup.bat` to force a fresh INI download
+3. If it says "not patched yet", wait up to 48 hours and try again
+4. If it still does not work after 48 hours, run `02-Setup.bat` to force a fresh INI download
 
 ---
 
